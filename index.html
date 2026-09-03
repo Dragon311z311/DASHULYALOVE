@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e0a17" />
+    <meta name="color-scheme" content="dark" />
+    <title>Для тебя ❤️</title>
+    <meta name="description" content="Маленький цифровой подарок" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <div class="grain"></div>
+      <div class="ambient-particles hidden" id="ambientParticles"></div>
+      <button class="music-toggle off hidden" id="musicToggle" aria-label="Музыка">⏸</button>
+
+      <!-- ЭКРАН-ВХОД (СЕРДЦЕ) -->
+      <div class="gate" id="gate">
+        <div class="gate-glow"></div>
+        <div class="gate-stars" id="gateStars"></div>
+        <div class="gate-center">
+          <button class="heart-btn phase-idle" id="heartBtn" aria-label="Прикоснись к сердцу">
+            <div class="heart-particles hidden" id="heartParticles"></div>
+            <div class="heart-icon-wrap">
+              <svg viewBox="0 0 100 100" class="heart-icon heart-icon-base" fill="none">
+                <path d="M50,88 C15,64 6,38 24,22 C36,11 50,20 50,34 C50,20 64,11 76,22 C94,38 85,64 50,88 Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <svg viewBox="0 0 100 100" class="heart-icon heart-icon-fill-svg">
+                <defs>
+                  <clipPath id="heartFillClip"><rect id="heartClipRect" x="0" y="100" width="100" height="0"></rect></clipPath>
+                  <linearGradient id="burgundyGrad" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#5c101f"></stop>
+                    <stop offset="100%" stop-color="#a52a45"></stop>
+                  </linearGradient>
+                </defs>
+                <path d="M50,88 C15,64 6,38 24,22 C36,11 50,20 50,34 C50,20 64,11 76,22 C94,38 85,64 50,88 Z" fill="url(#burgundyGrad)" stroke="url(#burgundyGrad)" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#heartFillClip)"></path>
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div class="gate-caption">
+          <p class="gate-instruction" id="gateInstruction"></p>
+          <p class="gate-sub" id="gateSub"></p>
+        </div>
+      </div>
+
+      <!-- ГЛАВНЫЙ ЭКРАН -->
+      <div class="scene home-scene hidden" id="screen-home">
+        <div class="home-bg-glow"></div>
+        <div class="home-header">
+          <p class="eyebrow" id="homeKicker"></p>
+          <h1 class="title-lg" id="homeTitle"></h1>
+          <p class="body-text home-subtitle" id="homeSubtitle"></p>
+        </div>
+        <div class="nav-grid" id="navGrid"></div>
+        <button class="finale-card locked" id="finaleCard">
+          <span id="finaleIcon">🔒</span>
+          <span class="finale-card-text" id="finaleText"></span>
+        </button>
+        <button class="secret-heart" id="secretHeart" aria-label="секрет"></button>
+      </div>
+
+      <!-- ПОЗДРАВЛЕНИЕ -->
+      <div class="scene scroll-scene congrat-scene hidden" id="screen-congratulation">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="congrat-inner">
+          <h2 class="title-lg congrat-title" id="congratTitle"></h2>
+          <div class="congrat-paragraphs" id="congratParagraphs"></div>
+        </div>
+      </div>
+
+      <!-- МОИ ПРИЧИНЫ -->
+      <div class="scene reasons-scene hidden" id="screen-reasons">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="reasons-header">
+          <p class="eyebrow" id="reasonsHeaderTitle"></p>
+          <p class="body-text reasons-subtitle" id="reasonsSubtitle"></p>
+        </div>
+
+        <div id="reasonsDeckWrap">
+          <div class="reasons-stage">
+            <div class="reasons-bokeh" id="reasonsBokeh"></div>
+            <button class="reason-card" id="reasonCard">
+              <span class="reason-mark">❝</span>
+              <p class="reason-text" id="reasonText"></p>
+              <span class="reason-tap-hint">нажми, чтобы продолжить</span>
+            </button>
+            <div class="reason-card reason-done hidden" id="reasonDoneCard">
+              <span class="reason-mark">❤</span>
+              <p class="reason-text" id="reasonFooterText"></p>
+              <div class="reason-done-actions">
+                <button class="primary-btn" id="reasonGalleryBtn"></button>
+                <button class="reason-restart-link" id="reasonRestartBtn"></button>
+              </div>
+            </div>
+          </div>
+          <div class="reasons-dots" id="reasonsDots"></div>
+        </div>
+
+        <div class="reasons-gallery hidden" id="reasonsGallery"></div>
+      </div>
+
+      <!-- ЗАГАДАЙ ЖЕЛАНИЕ -->
+      <div class="scene wish-scene hidden" id="screen-wish">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="wish-stage" id="wishStage">
+          <p class="title-md wish-prompt" id="wishPrompt"></p>
+          <div class="cake-wrap">
+            <div class="cake-bokeh" id="cakeBokeh"></div>
+            <div class="cake-figure">
+              <div class="flame flame-idle" id="flame"></div>
+              <div class="wick"></div>
+              <div class="candle"></div>
+              <svg class="cake" viewBox="0 0 200 128" width="220">
+                <ellipse cx="100" cy="118" rx="92" ry="9" fill="#150c1f" opacity="0.55"></ellipse>
+                <rect x="26" y="60" width="148" height="52" rx="16" fill="#3a2456"></rect>
+                <rect x="26" y="60" width="148" height="16" rx="8" fill="#4d3372"></rect>
+                <rect x="26" y="88" width="148" height="6" fill="#4d3372" opacity="0.5"></rect>
+                <path d="M26,60 C26,40 55,26 100,26 C145,26 174,40 174,60 Z" fill="#e8a6a0"></path>
+                <circle cx="60" cy="52" r="2.4" fill="#f0d9b5" opacity="0.85"></circle>
+                <circle cx="80" cy="52" r="2.4" fill="#f0d9b5" opacity="0.85"></circle>
+                <circle cx="100" cy="52" r="2.4" fill="#f0d9b5" opacity="0.85"></circle>
+                <circle cx="120" cy="52" r="2.4" fill="#f0d9b5" opacity="0.85"></circle>
+                <circle cx="140" cy="52" r="2.4" fill="#f0d9b5" opacity="0.85"></circle>
+              </svg>
+              <button class="blow-touch-zone" id="blowZone" aria-label="Потуши свечу"></button>
+            </div>
+            <p class="body-text wish-hint" id="wishHint"></p>
+            <p class="wish-subhint" id="wishSubhint"></p>
+          </div>
+        </div>
+        <div class="wish-after hidden" id="wishAfter">
+          <div class="wish-sparkles" id="wishSparkles"></div>
+          <div class="smoke"></div>
+          <p class="title-md" id="wishAfterMessage"></p>
+          <button class="primary-btn" id="wishContinueBtn"></button>
+        </div>
+      </div>
+
+      <!-- НАШИ МОМЕНТЫ -->
+      <div class="scene scroll-scene album-scene hidden" id="screen-album">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="album-header">
+          <p class="eyebrow" id="albumTitle"></p>
+          <p class="body-text album-subtitle" id="albumSubtitle"></p>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+      </div>
+
+      <!-- ПИСЬМО -->
+      <div class="scene scroll-scene letter-scene hidden" id="screen-letter">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="envelope-stage" id="envelopeStage">
+          <p class="title-md envelope-label" id="envelopeLabel"></p>
+          <button class="envelope" id="envelopeBtn" aria-label="Открыть письмо">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="envelope-heart">❤</div>
+          </button>
+          <p class="envelope-hint" id="envelopeHint"></p>
+        </div>
+        <div class="paper-stage hidden" id="paperStage">
+          <div class="paper">
+            <p class="paper-date" id="paperDate"></p>
+            <div class="paper-text" id="paperText"></div>
+            <p class="paper-sign" id="paperSign"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ФИНАЛ -->
+      <div class="scene finale-scene hidden" id="screen-finale">
+        <button class="back-btn" data-back aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div class="finale-stars" id="finaleStars"></div>
+        <div class="finale-hearts" id="finaleHearts"></div>
+        <div class="finale-content">
+          <p class="title-md finale-line" id="finaleLine1"></p>
+          <p class="title-md finale-line" id="finaleLine2"></p>
+          <p class="title-lg finale-line finale-heart" id="finaleLine3"></p>
+          <p class="finale-footer" id="finaleFooter"></p>
+        </div>
+      </div>
+
+      <!-- МОДАЛКА: ВОПРОС ПРО ДЕНЬ РОЖДЕНИЯ -->
+      <div class="wg-overlay closed" id="wishConfirmModal">
+        <div class="wg-card glass-card">
+          <div id="wgAsk">
+            <span class="wg-emoji">🎂</span>
+            <p class="title-md wg-question" id="wgQuestion"></p>
+            <p class="body-text wg-sub" id="wgSub"></p>
+            <div class="wg-actions">
+              <button class="primary-btn" id="wgYesBtn"></button>
+              <button class="wg-secondary" id="wgNoBtn"></button>
+            </div>
+          </div>
+          <div id="wgDecline" class="hidden">
+            <p class="body-text wg-decline-text" id="wgDeclineText"></p>
+            <button class="primary-btn" id="wgOkBtn" style="margin-top:20px"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- МОДАЛКА: СЕКРЕТ -->
+      <div class="secret-overlay closed" id="secretModal">
+        <div class="secret-card glass-card">
+          <div class="secret-sparkles" id="secretSparkles"></div>
+          <p class="title-md" id="secretTitle"></p>
+          <p class="body-text" id="secretMessage" style="margin-top:14px"></p>
+          <button class="primary-btn" id="secretCloseBtn" style="margin-top:22px"></button>
+        </div>
+      </div>
+
+      <!-- МОДАЛКА: ПРОСМОТР ФОТО -->
+      <div class="photo-viewer closed" id="photoViewer">
+        <div class="photo-viewer-inner" id="photoViewerInner">
+          <div class="photo-full-frame" id="photoFullFrame"></div>
+          <p class="photo-full-title" id="photoFullTitle"></p>
+          <p class="photo-full-caption" id="photoFullCaption"></p>
+          <p class="photo-full-date" id="photoFullDate"></p>
+          <div class="photo-nav">
+            <button id="photoPrev" aria-label="Предыдущее">‹</button>
+            <button id="photoNext" aria-label="Следующее">›</button>
+          </div>
+        </div>
+        <button class="photo-close" id="photoClose" aria-label="Закрыть">✕</button>
+      </div>
+    </div>
+
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
